@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+:root { --bg-color: #f5f0e6; --card-bg: #ffffff; --text-color: #4b4b4b; --border-color: #dcd3c4; --accent-color: #8fb38a; --accent-hover: #7aa379; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; }
+.container { max-width: 700px; margin: auto; padding: 24px; background: var(--card-bg); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+h2, h3 { text-align: center; margin-bottom: 16px; }
+form, .controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+label { font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+input, select, button { padding: 12px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 8px; background: #fdfcfb; color: var(--text-color); box-sizing: border-box; }
+button { background: var(--accent-color); color: white; font-weight: bold; transition: background 0.2s; cursor: pointer; border: none; }
+button:hover { background: var(--accent-hover); }
+button i { margin-right: 6px; }
+.summary p { margin: 4px 0; font-weight: bold; }
+table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+th, td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
+th { background: #f2ede3; font-weight: 600; }
+td button { background: none; border: none; color: #e57373; font-size: 16px; cursor: pointer; }
+td button:hover { text-decoration: underline; }
+.expense-type { background: #f4f1eb; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
+.expense-type-label { font-size: 14px; margin-bottom: 8px; font-weight: 500; }
+.radio-option { display: inline-block; margin-right: 16px; font-size: 15px; cursor: pointer; position: relative; padding-left: 24px; }
+.radio-option input[type="radio"] { position: absolute; left: 0; top: 2px; transform: scale(1.2); }
+#calendar { margin-top: 16px; }
+canvas { display: block; margin: auto; max-width: 100%; }
+#regular-expense-list { margin-top: 12px; padding: 12px; background: #f9f7f2; border-radius: 8px; border: 1px solid var(--border-color); }
+.regular-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; }
+.regular-item:last-child { border-bottom: none; }
+.regular-item button { background: #e57373; border: none; color: white; padding: 4px 10px; font-size: 12px; border-radius: 6px; cursor: pointer; }
+.regular-item button:hover { background: #d44343; }
+@media (max-width: 600px) { th, td { font-size: 12px; padding: 6px; } h2, h3 { font-size: 18px; } }
