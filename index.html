@@ -4,19 +4,131 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>家計簿アプリ</title>
+
+  <!-- スタイルとフォント -->
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- 本文はCodePen HTMLと同じ -->
+  <div class="container">
+    <h2><i class="fas fa-leaf"></i> 家計簿アプリ</h2>
+
+    <!-- 入力フォーム -->
+    <form id="expense-form">
+      <label>日付<input type="date" id="date" required></label>
+      <label>金額<input type="number" id="amount" placeholder="金額" required></label>
+      <label>カテゴリ
+        <select id="category" required>
+          <option value="">選択してください</option>
+          <option>食費</option><option>交通費</option><option>住宅費</option>
+          <option>通信費</option><option>水道光熱費</option><option>保険料</option>
+          <option>税金</option><option>日用品費</option><option>医療費</option>
+          <option>被服費</option><option>雑費</option><option>娯楽費</option>
+          <option>特別日</option><option>その他</option>
+        </select>
+      </label>
+      <label>メモ<input type="text" id="memo" placeholder="メモ"></label>
+      <div class="expense-type">
+        <p class="expense-type-label">支出の種類を選択してください</p>
+        <label class="radio-option">
+          <input type="radio" name="expenseType" value="private" checked> プライベート
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="expenseType" value="business"> 業務支出（経費）
+        </label>
+      </div>
+      <button type="submit"><i class="fas fa-plus-circle"></i> 追加</button>
+    </form>
+
+    <!-- 検索・フィルター -->
+    <div class="controls">
+      <label>表示月：
+        <select id="year-select"></select>年
+        <select id="month-select"></select>月
+      </label>
+      <label>検索キーワード：
+        <input type="text" id="search-keyword" placeholder="メモ・カテゴリなどで検索">
+      </label>
+      <label>カテゴリ絞り込み：
+        <select id="filter-category">
+          <option value="">すべてのカテゴリ</option>
+          <option>食費</option><option>交通費</option><option>住宅費</option>
+          <option>通信費</option><option>水道光熱費</option><option>保険料</option>
+          <option>税金</option><option>日用品費</option><option>医療費</option>
+          <option>被服費</option><option>雑費</option><option>娯楽費</option>
+          <option>特別日</option><option>その他</option>
+        </select>
+      </label>
+      <label>経費フィルター：
+        <select id="filter-expense">
+          <option value="">すべて</option>
+          <option value="business">業務支出（経費）のみ</option>
+          <option value="private">プライベートのみ</option>
+        </select>
+      </label>
+      <button id="export-csv"><i class="fas fa-file-csv"></i> CSVエクスポート</button>
+    </div>
+
+    <!-- 合計 -->
+    <div class="summary">
+      <p id="monthly-summary">月合計：0円　内、経費：0円</p>
+      <p id="yearly-summary">年合計：0円　内、経費：0円</p>
+    </div>
+
+    <!-- 表 -->
+    <h3><i class="fas fa-list-ul"></i> 支出一覧</h3>
+    <table id="expense-table">
+      <thead>
+        <tr>
+          <th>日付</th><th>金額</th><th>カテゴリ</th><th>メモ</th><th>経費</th><th>削除</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- カレンダー -->
+    <h3><i class="fas fa-calendar"></i> 入力履歴カレンダー</h3>
+    <div id="calendar"></div>
+
+    <!-- 円グラフ -->
+    <h3><i class="fas fa-chart-pie"></i> カテゴリ別支出グラフ</h3>
+    <canvas id="category-chart" width="100" height="100"></canvas>
+
+    <!-- 定期支出 -->
+    <h3><i class="fas fa-sync-alt"></i> 毎月の定期支出の管理</h3>
+    <form id="regular-form">
+      <label>日付（毎月）<input type="number" id="regular-day" min="1" max="31" required></label>
+      <label>金額<input type="number" id="regular-amount" required></label>
+      <label>カテゴリ
+        <select id="regular-category" required>
+          <option value="">選択してください</option>
+          <option>食費</option><option>交通費</option><option>住宅費</option>
+          <option>通信費</option><option>水道光熱費</option><option>保険料</option>
+          <option>税金</option><option>日用品費</option><option>医療費</option>
+          <option>被服費</option><option>雑費</option><option>娯楽費</option>
+          <option>特別日</option><option>その他</option>
+        </select>
+      </label>
+      <label>メモ<input type="text" id="regular-memo"></label>
+      <div class="expense-type">
+        <label class="radio-option">
+          <input type="radio" name="regular-expense-type" value="private" checked> プライベート
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="regular-expense-type" value="business"> 業務支出（経費）
+        </label>
+      </div>
+      <button type="button" id="add-regular-btn"><i class="fas fa-plus"></i> 定期支出を追加</button>
+    </form>
+
+    <div id="regular-expense-list"></div>
+  </div>
+
+  <!-- 外部ライブラリ読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
   <script src="script.js"></script>
-  <div class="container">
-  <h2><i class="fas fa-leaf"></i> 家計簿アプリ</h2>
-  <p>ページが正しく表示されました！JavaScriptを追加すると家計簿機能が動きます。</p>
-</div>
-
 </body>
 </html>
